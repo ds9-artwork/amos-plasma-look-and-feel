@@ -137,8 +137,8 @@ interior.element=button
 indicator.size=10
 text.normal.color=#000000c8
 text.focus.color=black
-text.press.color=white
-text.toggle.color=white
+text.press.color=black
+text.toggle.color=black
 text.shadow=0
 text.margin=4
 text.iconspacing=4
@@ -246,7 +246,7 @@ frame.right=6
 text.normal.color=#0000007d
 text.focus.color=#000000b4
 text.press.color=none
-text.toggle.color=#f5f5f5
+text.toggle.color=black
 
 [TabFrame]
 inherits=PanelButtonCommand
@@ -339,8 +339,8 @@ text.margin.left=4
 text.margin.right=4
 text.normal.color=#000000c8
 text.focus.color=black
-text.press.color=white
-text.toggle.color=white
+text.press.color=black
+text.toggle.color=black
 frame.expansion=0
 
 [Splitter]
@@ -376,7 +376,7 @@ interior.element=menuitem
 indicator.element=menuitem
 size.minheight=32
 text.normal.color=#000000c8
-text.focus.color=white
+text.focus.color=black
 text.margin.top=1
 text.margin.bottom=1
 text.margin.left=4
