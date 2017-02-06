@@ -1,0 +1,14 @@
+[SddmGreeterTheme]
+Name=Amos
+Description=Amos SDDM Theme
+Author=Uri Herrera
+License=CC-BY-SA
+Type=sddm-theme
+Version=0.1
+Website=https://github.com/nomad-shell/amos-plasma-look-and-feel.git
+Screenshot=screenshot.png
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Email=uri_herrera@nitrux.in
+Theme-API=2.0
