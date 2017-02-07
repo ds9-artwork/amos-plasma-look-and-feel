@@ -15,8 +15,12 @@ Rectangle {
     id: lockScreenRoot
 
     //colorGroup: PlasmaCore.Theme.ComplementaryColorGroup
+    color: "transparent"
 
-    color: "#E2EEF3"
+    Image {
+        anchors.fill: parent
+        source: "../components/artwork/background.png"
+    }
     Connections {
         target: authenticator
         onFailed: {
@@ -48,45 +52,10 @@ Rectangle {
         connectedSources: "Caps Lock"
     }
 
-    Rectangle {
-        id: actionBar
-        anchors.top: parent.top;
-        color: "#FAFAFA"
-        opacity: 0.9
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width; height: 32
-
-        // Clock
-        Row {
-            height: parent.height
-            anchors.right: parent.right
-            anchors.margins: 9
-            spacing: 5
-
-            InlineClock {
-                color: "#4D4D4D"
-                font.pointSize: 10
-                font.weight: Font.Bold
-            }
-        }
-        
-        DropShadow {
-            anchors.fill: actionBar
-            horizontalOffset: 0
-            verticalOffset: 2
-            cached: true
-            radius: 8.0
-            samples: 15
-            color: "#33000000"
-            source: actionBar
-        }
-    }
-    
-
-    Clock {
+    AnalogClock {
         id: clock
         anchors.bottom: parent.verticalCenter
-        anchors.bottomMargin: units.gridUnit * - 1
+        anchors.bottomMargin: units.gridUnit * -1
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
@@ -100,69 +69,13 @@ Rectangle {
 
         property bool locked: true
 
-
-        Loader {
-            id: passwordAreaLoader
-            Layout.fillWidth: true
-            sourceComponent: mainBlock.locked ? undefined : passwordArea
-            height: 0;
-            clip: true
-
-            NumberAnimation on height {
-                id: showPasswordArea
-                from: 0
-                to: loginButton.height
-                // duration: 500
-            }
-        }
-
-        PlasmaCore.ColorScope {
-            Layout.alignment: Qt.AlignHCenter
-            implicitHeight: loginButton.implicitHeight
-            implicitWidth: loginButton.implicitWidth
-
-            colorGroup: PlasmaCore.Theme.ComplementaryColorGroup
-
-
-            PlasmaComponents.Button {
-                id: loginButton
-                focus: true
-                text: !authenticator.graceLocked ? i18nd(
-                                                       "plasma_lookandfeel_org.kde.lookandfeel",
-                                                       "Unlock") : i18nd(
-                                                       "plasma_lookandfeel_org.kde.lookandfeel",
-                                                       "Authenticating...")
-                enabled: !authenticator.graceLocked
-                onClicked: {
-                    if (mainBlock.locked) {
-                        showPasswordArea.start()
-                        mainBlock.locked = false
-                        passwordAreaLoader.item.forceActiveFocus()
-                    } else
-                        authenticator.tryUnlock(passwordAreaLoader.item.password)
-                }
-
-                Keys.onPressed: {
-                    if (mainBlock.locked) {
-                        showPasswordArea.start()
-                        mainBlock.locked = false
-                        root.clearPassword()
-                    }
-                }
-            }
-        }
-    }
-
-    Component {
-        id: passwordArea
-
-        PlasmaComponents.TextField {
+        CustomPasswordField {
             id: passwordBox
+            height: 32
+            width: 260
             property alias password: passwordBox.text
 
-            // placeholderText: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Password")
             focus: true
-            echoMode: TextInput.Password
             enabled: !authenticator.graceLocked
 
             onAccepted: authenticator.tryUnlock(passwordBox.text)
@@ -171,28 +84,43 @@ Rectangle {
                 target: root
                 onClearPassword: {
                     passwordBox.forceActiveFocus()
-                    passwordBox.selectAll()
+                    //                    passwordBox.selectAll()
                 }
-            }
-
-            Text {
-                anchors.centerIn: parent
-                opacity: 0.6
-                visible: passwordBox.text == ""
-                color: theme.viewTextColor
-                text: i18nd("plasma_lookandfeel_org.kde.lookandfeel",
-                            "Password")
             }
 
             Keys.onPressed: {
                 if (event.key == Qt.Key_Escape) {
                     root.clearPassword()
                 }
+            }
+        }
 
+        Image {
+            Layout.topMargin: 64
+            Layout.alignment: Qt.AlignHCenter
+            source: "../components/artwork/login_icon.png"
+        }
+
+        PlasmaComponents.Button {
+            id: loginButton
+            focus: true
+            Layout.alignment: Qt.AlignHCenter
+            text: !authenticator.graceLocked ? i18nd(
+                                                   "plasma_lookandfeel_org.kde.lookandfeel",
+                                                   "Unlock") : i18nd(
+                                                   "plasma_lookandfeel_org.kde.lookandfeel",
+                                                   "Authenticating...")
+            enabled: !authenticator.graceLocked
+            onClicked: authenticator.tryUnlock(passwordBox.password)
+
+            Keys.onPressed: {
+                if (mainBlock.locked) {
+                    mainBlock.locked = false
+                    root.clearPassword()
+                }
             }
         }
     }
-
 
     Component.onCompleted: {
         // version support checks
