@@ -100,7 +100,6 @@ Rectangle {
         Image {
             source: "Components/bg_win.svg"
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: -100
 
             ColumnLayout {
                 id: mainColumn
