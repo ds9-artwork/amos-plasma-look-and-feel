@@ -52,22 +52,20 @@ Rectangle {
         connectedSources: "Caps Lock"
     }
 
-    AnalogClock {
-        id: clock
-        anchors.bottom: parent.verticalCenter
-        anchors.bottomMargin: units.gridUnit * -1
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
+
 
     ColumnLayout {
         id: mainBlock
         spacing: 18
         width: 200
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: clock.bottom
-        anchors.topMargin: 18
+        anchors.centerIn: parent
 
         property bool locked: true
+
+        AnalogClock {
+            id: clock
+            Layout.alignment: Qt.AlignHCenter
+        }
 
         CustomPasswordField {
             id: passwordBox
@@ -75,6 +73,7 @@ Rectangle {
             width: 260
             property alias password: passwordBox.text
 
+            Layout.alignment: Qt.AlignHCenter
             focus: true
             enabled: !authenticator.graceLocked
 
@@ -92,6 +91,13 @@ Rectangle {
                 if (event.key == Qt.Key_Escape) {
                     root.clearPassword()
                 }
+            }
+
+            Image {
+                source: "../components/artwork/pass.png"
+                anchors.right: parent.left
+                anchors.rightMargin: 12
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
@@ -117,6 +123,20 @@ Rectangle {
                 if (mainBlock.locked) {
                     mainBlock.locked = false
                     root.clearPassword()
+                }
+            }
+
+            style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 100
+                    implicitHeight: 25
+                    border.width: control.activeFocus ? 2 : 1
+                    border.color: "#888"
+                    radius: 0
+                    gradient: Gradient {
+                        GradientStop { position: 0 ; color: control.pressed ? "#ccc" : "#eee" }
+                        GradientStop { position: 1 ; color: control.pressed ? "#aaa" : "#ccc" }
+                    }
                 }
             }
         }

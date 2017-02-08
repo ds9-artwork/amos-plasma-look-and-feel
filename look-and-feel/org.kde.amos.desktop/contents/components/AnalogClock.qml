@@ -2,8 +2,8 @@ import QtQuick 2.0
 
 Item {
     id: clock
-    width: 200
-    height: 240
+    width: childrenRect.width
+    height: childrenRect.height
 
     property int hours
     property int minutes
@@ -30,9 +30,8 @@ Item {
     }
 
     Item {
-        anchors.centerIn: parent
-        width: 200
-        height: 240
+        width: background.width
+        height: background.height
 
         Image {
             id: background
